@@ -19,7 +19,7 @@ class JsonStorage:
                 existing_data = json.load(file)
         except FileNotFoundError:
             existing_data = {}
-        
+
         existing_data[str(id)] = data
 
         with open(f"{model_name}.json", "w", encoding="utf-8") as file:
