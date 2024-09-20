@@ -4,11 +4,13 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from loguru import logger
 
+from config import chats, id, prefix, secret, username
 from hexable.api import API, OwnerType
 from json_parser import fields
 from json_parser.models import BaseModelMeta
 
 load_dotenv()
+logger.disable("hexable")
 
 
 class User(BaseModelMeta):
@@ -17,7 +19,6 @@ class User(BaseModelMeta):
     prefix = fields.StrField()
     chats = fields.ListField(fields.JsonField())
     secret = fields.StrField()
-    installed = fields.BoolField()
 
 
 api = None
@@ -40,12 +41,11 @@ async def lifespan(app: FastAPI):
 
     if not user:
         user = User.create(
-            id=715616525,
-            username="Hexik",
-            prefix="id",
-            chats=[],
-            secret="secret",
-            installed=True,
+            id=id,
+            username=username,
+            prefix=prefix,
+            chats=chats,
+            secret=secret,
         )
 
     api = API(token=token)

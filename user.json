@@ -2,16 +2,13 @@
   "715616525": {
     "id": 715616525,
     "username": "Hexik",
-    "prefix": "id",
+    "prefix": ".с",
     "chats": [
       {
         "id": "1ecdcc70",
-        "iris_id": null,
-        "peer_id": 2000000860,
-        "installed": false
+        "peer_id": 2000000860
       }
     ],
-    "secret": "secret",
-    "installed": true
+    "secret": "dfghiudfg"
   }
 }
