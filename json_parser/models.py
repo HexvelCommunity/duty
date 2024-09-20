@@ -116,3 +116,28 @@ class BaseModelMeta(BaseModel, metaclass=ModelMeta):
         instance = cls(**kwargs)
         cls.save(instance)
         return instance
+
+    @classmethod
+    def update(cls, id: int, **kwargs) -> Optional[T]:
+        """
+        Обновить экземпляр модели по id.
+        :param id: идентификатор экземпляра для обновления
+        :param kwargs: новые значения для полей
+        :return: обновленный экземпляр или None, если экземпляр не найден
+        """
+        model = cls.get(id)
+
+        if model is None:
+            logger.warning(f"Экземпляр с id {id} не найден для обновления.")
+            return None
+
+        for field_name, value in kwargs.items():
+            if field_name in cls._meta["fields"]:
+                setattr(model, field_name, value)
+            else:
+                logger.warning(
+                    f"Поле '{field_name}' не существует в модели '{cls.__name__}'."
+                )
+
+        cls.save(model)
+        return model

@@ -23,3 +23,8 @@ class BaseModel:
     def create(cls, **kwargs):
         """Создать и сохранить новый экземпляр."""
         raise NotImplementedError
+
+    @classmethod
+    def update(cls, id, **kwargs):
+        """Обновить экземпляр."""
+        raise NotImplementedError

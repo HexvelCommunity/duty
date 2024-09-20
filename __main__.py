@@ -1,27 +1,17 @@
-from fastapi import FastAPI
-from loguru import logger
+from fastapi.middleware.cors import CORSMiddleware
 
-from json_parser.fields import IntField, StrField
-from json_parser.models import BaseModelMeta
+from api.v1.routes import callback_router
+from init import app
 
+app.include_router(callback_router)
 
-class User(BaseModelMeta):
-    id = IntField()
-    username = StrField()
-    token = StrField()
-
-
-async def lifespan(app: FastAPI):
-    logger.debug("Creating user...")
-    user = User.get(id=2)
-    if not user:
-        user = User.create(id=2, username="user", token="12345")
-    logger.debug("User got: {user}", user=user.to_dict())
-    yield
-    logger.warning("App stopped")
-
-
-app = FastAPI(lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 if __name__ == "__main__":

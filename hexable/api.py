@@ -42,7 +42,7 @@ class API(SessionContainerMixin):
         self._stable_request_params = {"access_token": self._token, "v": self._version}
 
         self._update_requests_delay()
-        
+
     @property
     def api_instance(self) -> typing.Self:
         return self

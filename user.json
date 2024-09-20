@@ -1,4 +1,17 @@
 {
-  "1": { "id": 1, "username": "челик", "token": "token" },
-  "2": { "id": 2, "username": "user", "token": "12345" }
+  "715616525": {
+    "id": 715616525,
+    "username": "Hexik",
+    "prefix": "id",
+    "chats": [
+      {
+        "id": "1ecdcc70",
+        "iris_id": null,
+        "peer_id": 2000000860,
+        "installed": false
+      }
+    ],
+    "secret": "secret",
+    "installed": true
+  }
 }
