@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from loguru import logger
-
 from hexable.api import API
 from hexable.exceptions import APIError
 from hexable.types.hexable_types.codegen.objects import MessagesMessage

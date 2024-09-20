@@ -1,14 +1,1 @@
-{
-  "715616525": {
-    "id": 715616525,
-    "username": "Hexik",
-    "prefix": ".с",
-    "chats": [
-      {
-        "id": "1ecdcc70",
-        "peer_id": 2000000860
-      }
-    ],
-    "secret": "dfghiudfg"
-  }
-}
+{"715616525": {"id": 715616525, "username": "Hexik", "prefix": ".с", "chats": [{"id": "1ecdcc70", "peer_id": 2000000860, "installed": true}, {"id": "d4444750", "peer_id": 2000000861, "installed": true}], "secret": "dfghiudfg"}}

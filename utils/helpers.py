@@ -37,9 +37,16 @@ async def find_chat(data: IrisDutyEvent, api: API) -> Optional[Dict[str, Any]]:
     )
 
     if existing_chat:
-        chat = await api.messages.search(
-            q=data.message.text, peer_id=existing_chat["peer_id"], count=5
-        )
+        if not data.message:
+            history = await api.messages.get_history(peer_id=existing_chat["peer_id"])
+            return history.items[0]
+        else:
+            chat = await api.messages.search(
+                q=data.message.text if data.message else None,
+                peer_id=existing_chat["peer_id"],
+                count=1,
+            )
+
         return chat.items[0]
 
     messages = await api.messages.search(q=data.message.text, count=5)
@@ -48,7 +55,13 @@ async def find_chat(data: IrisDutyEvent, api: API) -> Optional[Dict[str, Any]]:
         logger.warning("No chats found with given message.")
         return None
 
-    current_chats.append({"id": data.object.chat, "peer_id": chats[0].peer_id})
+    current_chats.append(
+        {
+            "id": data.object.chat,
+            "peer_id": chats[0].peer_id,
+            "installed": False,
+        }
+    )
     User.update(id=user_id, chats=current_chats)
 
     return chats[0]
