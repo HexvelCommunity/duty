@@ -2,28 +2,25 @@ from typing import Callable, Dict, List
 
 from loguru import logger
 
+from models.iris import IrisDutyEventMethod
+
 
 class Route:
     def __init__(self):
         self.handlers: Dict[str, Callable] = {}
 
-    def message_handler(self, commands: List[str]):
+    def method_handler(self, method: IrisDutyEventMethod):
         def decorator(func: Callable):
-            for command in commands:
-                if command in self.handlers:
-                    logger.warning(
-                        f"Handler for command '{command}' is already registered."
-                    )
-                self.handlers[command] = func
+            if method in self.handlers:
+                logger.warning(f"Handler for method '{method}' is already registered.")
+            self.handlers[method] = func
             return func
 
         return decorator
 
-    def get_handler(self, message_text: str) -> Callable:
-        for command, handler in self.handlers.items():
-            if command in message_text.lower():
-                return handler
-        return None
+    def get_handler(self, method: IrisDutyEventMethod) -> Callable:
+        """Return the handler based on the IrisDutyEventMethod."""
+        return self.handlers.get(method, None)
 
 
 route = Route()

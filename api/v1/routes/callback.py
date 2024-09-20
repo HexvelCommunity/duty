@@ -17,19 +17,20 @@ async def dispatch_handler(data: IrisDutyEvent, api: API):
         logger.warning("Chat not found, unable to proceed with handler.")
         return {"response": "Chat not found"}
 
-    message_text = data.message.text.lower()
-    handler = route.get_handler(message_text)
+    handler = route.get_handler(data.method)
 
     if handler:
         return await handler(data, chat, api)
 
-    logger.info(f"No handler found for message: {message_text}")
+    logger.info(f"No handler found for method: {data.method}")
     return {"response": "No handler matched"}
 
 
 @router.post("/callback")
 async def callback(data: IrisDutyEvent, api: API = Depends(get_api)):
     user = User.get(id=id)
+
+    logger.debug(data)
 
     if data.secret != user.secret:
         return {"response": "Неверный секретный код"}

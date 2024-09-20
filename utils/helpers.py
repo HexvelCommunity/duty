@@ -1,3 +1,4 @@
+import asyncio
 import importlib
 import os
 from typing import Any, Dict, List, Optional
@@ -51,3 +52,21 @@ async def find_chat(data: IrisDutyEvent, api: API) -> Optional[Dict[str, Any]]:
     User.update(id=user_id, chats=current_chats)
 
     return chats[0]
+
+
+async def get_all_history(api: API, peer_id: int, offset: int = 0):
+    chat = await api.messages.get_history(count=1, peer_id=peer_id, offset=offset)
+    count = chat.count
+
+    while offset < count:
+        try:
+            chat = await api.messages.get_history(
+                count=200, peer_id=peer_id, offset=offset
+            )
+        except Exception:
+            await asyncio.sleep(3)
+            continue
+
+        offset += 200
+        for item in chat.items:
+            yield item
