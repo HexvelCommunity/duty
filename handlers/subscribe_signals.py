@@ -1,17 +1,23 @@
 from loguru import logger
 
-from config import id
-from hexable.api import API
-from hexable.types.hexable_types.codegen.objects import MessagesMessage
-from init import User
-from models.iris import IrisDutyEvent, IrisDutyEventMethod
-from utils import route
+from app.config import settings
+from app.core import route
+from app.schemas.iris.event import IrisDutyEvent
+from app.schemas.iris.methods import IrisDutyEventMethod
+from app.services.iris import IrisService
+from lib.hexable.api import API
+from lib.hexable.types.hexable_types.codegen.objects import MessagesMessage
 
 
 @route.method_handler(method=IrisDutyEventMethod.SUBSCRIBE_SIGNALS)
-async def subscribe_signals(data: IrisDutyEvent, message: MessagesMessage, api: API):
-    user = User.get(id=id)
-    chats = user.chats
+async def subscribe_signals(
+    _,
+    data: IrisDutyEvent,
+    message: MessagesMessage,
+    api: API,
+    service: IrisService,
+):
+    chats = service.get_chats(id=settings.id)
 
     for chat in chats:
         if chat["id"] != data.object.chat:
@@ -21,7 +27,10 @@ async def subscribe_signals(data: IrisDutyEvent, message: MessagesMessage, api: 
         logger.info(f"Чат с id '{data.object.chat}' найден и обновлен: {chat}")
         break
 
-    User.update(id=id, chats=chats)
+    user = service.get_user(id=settings.id)
+    user.chats = chats
+
+    service.update_user(user=user)
 
     edit_message = f"""
     🔥 Успешно. Я подписался на сигналы.

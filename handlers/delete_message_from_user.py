@@ -1,16 +1,20 @@
 from datetime import datetime
 
-from hexable.api import API
-from hexable.exceptions import APIError
-from hexable.types.hexable_types.codegen.objects import MessagesMessage
-from models.iris import IrisDutyEvent, IrisDutyEventMethod
-from utils import route
-from utils.helpers import get_all_history
+from app.core import route
+from app.core.utils import IrisHandlerManager
+from app.schemas.iris.event import IrisDutyEvent
+from app.schemas.iris.methods import IrisDutyEventMethod
+from lib.hexable.api import API
+from lib.hexable.exceptions import APIError
+from lib.hexable.types.hexable_types.codegen.objects import MessagesMessage
 
 
 @route.method_handler(method=IrisDutyEventMethod.DELETE_MESSAGES_FROM_USER)
 async def delete_message_from_user(
-    data: IrisDutyEvent, message: MessagesMessage, api: API
+    handler_manager: IrisHandlerManager,
+    data: IrisDutyEvent,
+    message: MessagesMessage,
+    api: API,
 ):
     message_id = await api.messages.send(
         peer_id=message.peer_id,
@@ -21,7 +25,7 @@ async def delete_message_from_user(
     cmids = []
     amount = data.object.amount
 
-    async for message in get_all_history(api, message.peer_id):
+    async for message in handler_manager.get_all_history(message.peer_id):
         if datetime.now().timestamp() - message.date >= 86400:
             break
 

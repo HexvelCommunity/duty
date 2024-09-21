@@ -1,7 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.v1.routes import callback_router
-from init import app
+from app.initialize import app
+from app.routing import callback_router
 
 app.include_router(callback_router)
 
