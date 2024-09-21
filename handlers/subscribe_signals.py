@@ -11,7 +11,6 @@ from lib.hexable.types.hexable_types.codegen.objects import MessagesMessage
 
 @route.method_handler(method=IrisDutyEventMethod.SUBSCRIBE_SIGNALS)
 async def subscribe_signals(
-    _,
     data: IrisDutyEvent,
     message: MessagesMessage,
     api: API,

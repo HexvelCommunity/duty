@@ -16,7 +16,7 @@ async def ban_expired(
 
     message_id = await api.messages.send(
         peer_id=message.peer_id,
-        message=f"🔥 Срок бана {user[0].first_name} {user[0].last_name} истёк.",
+        message=f"🔥 Срок бана [id{user[0].id}|{user[0].first_name} {user[0].last_name}] истёк.",
         random_id=0,
     )
 

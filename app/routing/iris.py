@@ -30,4 +30,4 @@ async def callback(
     iris_handler_manager = IrisHandlerManager(service, data, api)
     iris_handler_manager.load_handlers()
 
-    return await iris_handler_manager.dispatch_handler(settings.id)
+    return await iris_handler_manager.dispatch_handler()

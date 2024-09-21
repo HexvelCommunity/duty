@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from loguru import logger
 
 from app.config import settings
+from app.depends import iris_service
 from app.repositories.iris import User
 from lib.hexable.api import API, OwnerType
 
@@ -20,16 +21,17 @@ async def lifespan(app: FastAPI):
         logger.error("Token not found")
         raise Exception("Token not found") from ValueError("Token not found")
 
-    user = User.get(id=715616525)
+    user = iris_service.get_user(id=settings.id)
 
     if not user:
-        user = User.create(
+        user_dto = User(
             id=settings.id,
             username=settings.username,
             prefix=settings.prefix,
-            chats=settings.chats,
+            chats=[],
             secret=settings.secret,
         )
+        user = iris_service.create_user(user=user_dto)
 
     api = API(token=token)
     api._owner_type = OwnerType.USER

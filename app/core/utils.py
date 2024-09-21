@@ -1,5 +1,6 @@
 import asyncio
 import importlib
+import inspect
 import os
 from typing import Any, Dict, List, Optional
 
@@ -95,7 +96,7 @@ class IrisHandlerManager:
             for item in chat.items:
                 yield item
 
-    async def dispatch_handler(self, id: int):
+    async def dispatch_handler(self):
         chat = await self.search_peer_from_last_message()
 
         if not chat:
@@ -105,7 +106,21 @@ class IrisHandlerManager:
         handler = route.get_handler(self.data.method)
 
         if handler:
-            return await handler(self, self.data, chat, self.api, self.service)
+            handler_params = inspect.signature(handler).parameters
+            handler_args = {}
+
+            if "handler_manager" in handler_params:
+                handler_args["handler_manager"] = self
+            if "data" in handler_params:
+                handler_args["data"] = self.data
+            if "message" in handler_params:
+                handler_args["message"] = chat
+            if "api" in handler_params:
+                handler_args["api"] = self.api
+            if "service" in handler_params:
+                handler_args["service"] = self.service
+
+            return await handler(**handler_args)
 
         logger.info(f"No handler found for method: {self.data.method}")
         return {"response": "No handler matched"}
