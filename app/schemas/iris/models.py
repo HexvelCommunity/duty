@@ -24,6 +24,7 @@ class IrisDutyEventObject(BaseModel):
     user_id: int | None = Field(default=None)
     member_ids: list[int] | None = Field(default=None)
     reason: str | None = Field(default=None)
+    message: str | None = Field(default=None)
     source: str | None = Field(default=None)
     amount: int | None = Field(default=None)
     local_id: int | None = Field(default=None)
