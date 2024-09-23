@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from loguru import logger
 
 from app.config import settings
 from app.core.utils import IrisHandlerManager
@@ -19,11 +20,12 @@ async def callback(
     service: IrisService = Depends(get_iris_service),
 ):
     user = service.get_user(id=settings.id)
+    logger.debug(data)
 
     if data.secret != user.secret:
-        return {"response": "Неверный секретный код"}
+        return {"response": "error", "error_code": 3}
     if data.user_id != user.id:
-        return {"response": "Неверный идентификатор дежурного"}
+        return {"response": "error", "error_code": 1}
     if data.method == IrisDutyEventMethod.PING:
         return {"response": "ok"}
 
