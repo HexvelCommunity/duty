@@ -1,4 +1,3 @@
-from loguru import logger
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
 from app.schemas.iris.methods import IrisDutyEventMethod

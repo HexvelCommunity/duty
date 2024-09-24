@@ -8,6 +8,7 @@ from loguru import logger
 
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
+from app.schemas.iris.methods import IrisDutyEventMethod
 from app.services.iris import IrisService
 from lib.hexable.api import API
 
@@ -18,12 +19,15 @@ class IrisHandlerManager:
         self.data = data
         self.api = api
 
-    def load_handlers(self):
+    @staticmethod
+    def load_handlers():
         handlers_dir = os.path.join("handlers")
-        for filename in os.listdir(handlers_dir):
-            if filename.endswith(".py"):
-                module_name = f"handlers.{filename[:-3]}"
-                importlib.import_module(module_name)
+        for root, dirs, files in os.walk(handlers_dir):
+            for filename in files:
+                if filename.endswith(".py") and filename != "__init__.py":
+                    module_path = os.path.relpath(os.path.join(root, filename), handlers_dir)
+                    module_name = module_path.replace(os.sep, ".")[:-3]
+                    importlib.import_module(f"handlers.{module_name}")
 
     async def search_peer_from_last_message(self) -> Optional[Dict[str, Any]]:
         if not self.data:
@@ -103,7 +107,11 @@ class IrisHandlerManager:
             logger.warning("Chat not found, unable to proceed with handler.")
             return {"response": "Chat not found"}
 
-        handler = route.get_handler(self.data.method)
+        if self.data.method == IrisDutyEventMethod.SEND_MY_SIGNAL:
+            command = self.data.object.value.lower()
+            handler = route.get_my_signal_handler(command)
+        else:
+            handler = route.get_handler(self.data.method)
 
         if handler:
             handler_params = inspect.signature(handler).parameters
@@ -123,4 +131,8 @@ class IrisHandlerManager:
             return await handler(**handler_args)
 
         logger.info(f"No handler found for method: {self.data.method}")
-        return {"response": "No handler matched"}
+        return {
+            "response": "error",
+            "error_code": 1,
+            "error_message": "Команда не реализована.",
+        }
