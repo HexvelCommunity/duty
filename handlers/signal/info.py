@@ -23,7 +23,7 @@ async def get_user_info(
         ),
         None,
     )
-    db_chat_status = "дежурный" if db_chat else "не держурный"
+    db_chat_status = "дежурный 🎊" if db_chat else "не держурный 🙅‍♂️"
 
     send_message = f"""
     ╔⫷| [id{message.from_id}|Информация о деже]
@@ -34,9 +34,9 @@ async def get_user_info(
     ╠⫸| Iris Id: {data.object.chat}
     ╠⫸| Peer Id: {message.peer_id}
     ╠⫸| Название: {chat.title}
-    ╠⫸| Я тут {db_chat_status} 🎊
+    ╠⫸| Я тут {db_chat_status}
     ║
-    ╚⫸| ⚙ <-[HexDuty]-> ⚙
+    ╚⫸| ⚙ <-[IDM Lite]-> ⚙
     """.replace(
         "    ", ""
     )

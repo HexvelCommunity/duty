@@ -23,13 +23,12 @@ async def get_user_info(
         ),
         None,
     )
-    db_chat_status = "дежурный" if db_chat else "не держурный"
+    db_chat_status = "дежурный 🎊" if db_chat else "не держурный 🙅‍♂️"
 
     edit_message = f"""
     ╔⫷| [id{message.from_id}|Информация о деже]
     ╠⫸| {api_user_data[0].first_name} {api_user_data[0].last_name}
     ╠⫸| Никнейм: [id{message.from_id}|{user.username}]
-    ╠⫸| Префикс: {user.prefix}
     ╠⫸| В довах: {len(user.trust_users)}ч.
     ╠⫸| Чатов: {len(user.chats)}шт.
     ╠⫸| Токен валиден
@@ -38,9 +37,9 @@ async def get_user_info(
     ╠⫸| Iris Id: {data.object.chat}
     ╠⫸| Peer Id: {message.peer_id}
     ╠⫸| Название: {chat.title}
-    ╠⫸| Я тут {db_chat_status} 🎊
+    ╠⫸| Я тут {db_chat_status}
     ║
-    ╚⫸| ⚙ <-[HexDuty]-> ⚙
+    ╚⫸| ⚙ <-[IDM Lite]-> ⚙
     """.replace(
         "    ", ""
     )  # хз зачем я про токен написал, но пусть будет

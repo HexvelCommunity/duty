@@ -5,7 +5,6 @@ from lib.json_parser.models import BaseModelMeta
 class User(BaseModelMeta):
     id = fields.IntField()
     username = fields.StrField()
-    prefix = fields.StrField()
     chats = fields.ListField(fields.JsonField())
     trust_users = fields.ListField(fields.IntField())
     secret = fields.StrField()
@@ -23,7 +22,6 @@ class IrisRepository:
         user = User.create(
             id=user.id,
             username=user.username,
-            prefix=user.prefix,
             chats=user.chats,
             trust_users=user.trust_users,
             secret=user.secret,
@@ -35,7 +33,6 @@ class IrisRepository:
         user = User.update(
             id=user.id,
             username=user.username,
-            prefix=user.prefix,
             chats=user.chats,
             trust_users=user.trust_users,
             secret=user.secret,

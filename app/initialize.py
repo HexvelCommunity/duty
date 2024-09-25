@@ -32,7 +32,6 @@ async def lifespan(app: FastAPI):
         user_dto = User(
             id=settings.id,
             username=settings.username,
-            prefix=settings.prefix,
             chats=[],
             secret=settings.secret,
         )
