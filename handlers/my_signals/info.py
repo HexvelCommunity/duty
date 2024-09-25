@@ -39,7 +39,7 @@ async def get_user_info(
     ╠⫸| Название: {chat.title}
     ╠⫸| Я тут {db_chat_status}
     ║
-    ╚⫸| ⚙ <-[IDM Lite]-> ⚙
+    ╚⫸| ⚙ <-[IDM LITE]-> ⚙
     """.replace(
         "    ", ""
     )  # хз зачем я про токен написал, но пусть будет
