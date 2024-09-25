@@ -1,6 +1,6 @@
 from vkbottle import VKAPIError
 from vkbottle.api import API
-from vkbottle_types.codegen.objects import MessagesMessage
+from vkbottle.user import Message
 
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
@@ -10,7 +10,7 @@ from app.schemas.iris.methods import IrisDutyEventMethod
 @route.method_handler(method=IrisDutyEventMethod.BAN_EXPIRED)
 async def ban_expired(
     data: IrisDutyEvent,
-    message: MessagesMessage,
+    message: Message,
     api: API,
 ):
     user = await api.users.get(user_ids=data.object.user_id, name_case="gen")

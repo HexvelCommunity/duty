@@ -2,10 +2,12 @@ import asyncio
 import importlib
 import inspect
 import os
-from typing import Any, Dict, List, Optional
+import re
+from typing import Any, AsyncGenerator, Dict, List, Optional
 
 from loguru import logger
 from vkbottle import API
+from vkbottle.user import Message
 
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
@@ -110,8 +112,11 @@ class IrisHandlerManager:
             return {"response": "Chat not found"}
 
         if self.data.method == IrisDutyEventMethod.SEND_MY_SIGNAL:
-            command = self.data.object.value.lower()
+            command = self.data.object.value.split()[0].lower()
             handler = route.get_my_signal_handler(command)
+        elif self.data.method == IrisDutyEventMethod.SEND_SIGNAL:
+            signal_value = self.data.object.value.split()[0].lower()
+            handler = route.get_signal_handler(signal_value)
         else:
             handler = route.get_handler(self.data.method)
 
@@ -138,3 +143,24 @@ class IrisHandlerManager:
             "error_code": 1,
             "error_message": "Команда не реализована.",
         }
+
+    async def get_by_conversation_message_id(
+        self, api: API, peer_id: int, ids: list
+    ) -> AsyncGenerator[list, int]:
+        data = await api.messages.get_by_conversation_message_id(
+            peer_id=peer_id,
+            conversation_message_ids=ids,
+        )
+
+        for item in data.items:
+            yield item.id
+
+    async def search_user_id(self, event: Message) -> int:
+        if event.reply_message:
+            user_id = event.reply_message.from_id
+        elif len(event.text.split(maxsplit=2)) < 3:
+            user_id = event.from_id
+        else:
+            user_id = int(re.findall(r"\d+", event.text)[0])
+
+        return user_id

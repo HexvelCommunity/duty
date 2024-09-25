@@ -20,7 +20,6 @@ load_dotenv()
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     global api
-    logger.debug("App started")
     token = os.getenv("TOKEN")
 
     if token is None:
@@ -41,6 +40,8 @@ async def lifespan(app: FastAPI):
 
     api = API(token=token)
 
+    os.system("clear")
+    logger.debug("App started")
     yield
     await api.http_client.close()
     logger.warning("App stopped")

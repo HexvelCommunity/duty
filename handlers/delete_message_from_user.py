@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from vkbottle import API, VKAPIError
-from vkbottle_types.codegen.objects import MessagesMessage
+from vkbottle.user import Message
 
 from app.core import route
 from app.core.utils import IrisHandlerManager
@@ -13,7 +13,7 @@ from app.schemas.iris.methods import IrisDutyEventMethod
 async def delete_message_from_user(
     handler_manager: IrisHandlerManager,
     data: IrisDutyEvent,
-    message: MessagesMessage,
+    message: Message,
     api: API,
 ):
     message_id = await api.messages.send(

@@ -1,5 +1,5 @@
 from vkbottle import API
-from vkbottle_types.codegen.objects import MessagesMessage
+from vkbottle.user import Message
 
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
@@ -9,7 +9,7 @@ from app.schemas.iris.methods import IrisDutyEventMethod
 @route.method_handler(IrisDutyEventMethod.BAN_GET_REASON)
 async def ban_get_reason(
     data: IrisDutyEvent,
-    message: MessagesMessage,
+    message: Message,
     api: API,
 ):
     message_data = await api.messages.get_by_conversation_message_id(

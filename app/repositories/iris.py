@@ -7,6 +7,7 @@ class User(BaseModelMeta):
     username = fields.StrField()
     prefix = fields.StrField()
     chats = fields.ListField(fields.JsonField())
+    trust_users = fields.ListField(fields.IntField())
     secret = fields.StrField()
 
 
@@ -24,6 +25,7 @@ class IrisRepository:
             username=user.username,
             prefix=user.prefix,
             chats=user.chats,
+            trust_users=user.trust_users,
             secret=user.secret,
         )
 
@@ -35,5 +37,6 @@ class IrisRepository:
             username=user.username,
             prefix=user.prefix,
             chats=user.chats,
+            trust_users=user.trust_users,
             secret=user.secret,
         )

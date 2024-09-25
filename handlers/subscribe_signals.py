@@ -1,6 +1,6 @@
 from loguru import logger
 from vkbottle import API
-from vkbottle_types.codegen.objects import MessagesMessage
+from vkbottle.user import Message
 
 from app.config import settings
 from app.core import route
@@ -12,7 +12,7 @@ from app.services.iris import IrisService
 @route.method_handler(method=IrisDutyEventMethod.SUBSCRIBE_SIGNALS)
 async def subscribe_signals(
     data: IrisDutyEvent,
-    message: MessagesMessage,
+    message: Message,
     api: API,
     service: IrisService,
 ):

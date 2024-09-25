@@ -1,6 +1,6 @@
 from vkbottle import API, VKAPIError
+from vkbottle.user import Message
 from vkbottle_types.codegen.objects import MessagesConversationPeerType
-from vkbottle_types.objects import MessagesMessage
 
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
@@ -8,7 +8,7 @@ from app.schemas.iris.methods import IrisDutyEventMethod
 
 
 @route.method_handler(IrisDutyEventMethod.GROUP_BOTS_INVITED)
-async def group_bots_invited(data: IrisDutyEvent, message: MessagesMessage, api: API):
+async def group_bots_invited(data: IrisDutyEvent, message: Message, api: API):
     peer_id = None
     conversations = await api.messages.get_conversations()
 

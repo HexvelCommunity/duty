@@ -2,7 +2,7 @@ import io
 
 import aiohttp
 from vkbottle import API
-from vkbottle_types.objects import MessagesMessage
+from vkbottle.user import Message
 
 from app.core import route
 
@@ -29,7 +29,7 @@ async def upload_image(api: API, url: str) -> dict:
 
 
 @route.my_signal_handler(commands=["тян"])
-async def get_tyan(message: MessagesMessage, api: API):
+async def get_tyan(message: Message, api: API):
     await api.messages.edit(
         peer_id=message.peer_id,
         message_id=message.id,
