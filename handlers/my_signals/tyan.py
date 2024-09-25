@@ -1,13 +1,16 @@
 import io
+
 import aiohttp
+from vkbottle import API
+from vkbottle_types.objects import MessagesMessage
 
 from app.core import route
-from lib.hexable.api import API
-from lib.hexable.types.hexable_types.objects import MessagesMessage
 
 
 async def fetch_image(api: API) -> tuple[str, list]:
-    async with api.requests_session.get("https://api.waifu.pics/nsfw/waifu") as response:
+    async with api.requests_session.get(
+        "https://api.waifu.pics/nsfw/waifu"
+    ) as response:
         parsed_response = await api.parse_json_body(response)
         return parsed_response["url"]
 
@@ -41,20 +44,25 @@ async def get_tyan(message: MessagesMessage, api: API):
         photo = upload_data.get("photo")
         photo_hash = upload_data.get("hash")
 
-        attachs = await api.photos.save_messages_photo(server=server, photo=photo, hash=photo_hash)
-        attachment = f"photo{attachs[0].owner_id}_{attachs[0].id}_{attachs[0].access_key}"
+        attachs = await api.photos.save_messages_photo(
+            server=server, photo=photo, hash=photo_hash
+        )
+
+        attachment = (
+            f"photo{attachs[0].owner_id}_{attachs[0].id}_{attachs[0].access_key}"
+        )
 
         await api.messages.edit(
             peer_id=message.peer_id,
             message_id=message.id,
-            message=f"🌟 Твоя фотка",
+            message="🌟 Твоя фотка",
             attachment=attachment,
         )
     except Exception as e:
         await api.messages.edit(
             peer_id=message.peer_id,
             message_id=message.id,
-            message=f"Произошла ошибка: {str(e)}"
+            message=f"Произошла ошибка: {str(e)}",
         )
 
     return {"response": "ok"}

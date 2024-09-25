@@ -5,12 +5,12 @@ import os
 from typing import Any, Dict, List, Optional
 
 from loguru import logger
+from vkbottle import API
 
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
 from app.schemas.iris.methods import IrisDutyEventMethod
 from app.services.iris import IrisService
-from lib.hexable.api import API
 
 
 class IrisHandlerManager:
@@ -25,7 +25,9 @@ class IrisHandlerManager:
         for root, dirs, files in os.walk(handlers_dir):
             for filename in files:
                 if filename.endswith(".py") and filename != "__init__.py":
-                    module_path = os.path.relpath(os.path.join(root, filename), handlers_dir)
+                    module_path = os.path.relpath(
+                        os.path.join(root, filename), handlers_dir
+                    )
                     module_name = module_path.replace(os.sep, ".")[:-3]
                     importlib.import_module(f"handlers.{module_name}")
 

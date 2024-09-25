@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from loguru import logger
+from vkbottle import API
 
 from app.config import settings
 from app.core.utils import IrisHandlerManager
@@ -8,7 +9,6 @@ from app.initialize import get_api
 from app.schemas.iris.event import IrisDutyEvent
 from app.schemas.iris.methods import IrisDutyEventMethod
 from app.services.iris import IrisService
-from lib.hexable.api import API
 
 router = APIRouter()
 

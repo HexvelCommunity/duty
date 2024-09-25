@@ -1,10 +1,10 @@
 import time
 
 from pythonping import ping
+from vkbottle import API
+from vkbottle_types.codegen.objects import MessagesMessage
 
 from app.core import route
-from lib.hexable.api import API
-from lib.hexable.types.hexable_types.codegen.objects import MessagesMessage
 
 
 @route.my_signal_handler(commands=["пинг"])
@@ -18,7 +18,7 @@ async def ping_handler(message: MessagesMessage, api: API):
         peer_id=message.peer_id,
         message_id=message.id,
         message=f"🏓 Задержка API VK: {response_times} мс.\n"
-                f"🌐 Время пинга: {ping_time:.2f} сек.",
+        f"🌐 Время пинга: {ping_time:.2f} сек.",
     )
 
     return {"response": "ok"}

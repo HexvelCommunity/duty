@@ -1,12 +1,12 @@
 from datetime import datetime
 
+from vkbottle import API, VKAPIError
+from vkbottle_types.codegen.objects import MessagesMessage
+
 from app.core import route
 from app.core.utils import IrisHandlerManager
 from app.schemas.iris.event import IrisDutyEvent
 from app.schemas.iris.methods import IrisDutyEventMethod
-from lib.hexable.api import API
-from lib.hexable.exceptions import APIError
-from lib.hexable.types.hexable_types.codegen.objects import MessagesMessage
 
 
 @route.method_handler(method=IrisDutyEventMethod.DELETE_MESSAGES_FROM_USER)
@@ -48,11 +48,11 @@ async def delete_message_from_user(
             message_id=message_id,
             message=f"✅ @id{message.from_id} удаление сообщеня от @id{data.object.user_id} из чата. Сообщений удалено: {len(cmids)}.",
         )
-    except APIError as e:
+    except VKAPIError as e:
         await api.messages.edit(
             peer_id=message.peer_id,
             message_id=message_id,
-            message=f"❗ @id{message.from_id} удаление сообщеня от @id{data.object.user_id} из чата. Ошибка: {e.description}",
+            message=f"❗ @id{message.from_id} удаление сообщеня от @id{data.object.user_id} из чата. Ошибка: {e.error_msg}",
         )
     except Exception:
         await api.messages.edit(
@@ -62,4 +62,5 @@ async def delete_message_from_user(
         )
 
     finally:
+        return {"response": "ok"}
         return {"response": "ok"}

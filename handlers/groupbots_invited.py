@@ -1,10 +1,10 @@
+from vkbottle import API, VKAPIError
+from vkbottle_types.codegen.objects import MessagesConversationPeerType
+from vkbottle_types.objects import MessagesMessage
+
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
 from app.schemas.iris.methods import IrisDutyEventMethod
-from lib.hexable.api import API
-from lib.hexable.exceptions import APIError
-from lib.hexable.types.hexable_types.codegen.objects import MessagesConversationPeerType
-from lib.hexable.types.hexable_types.objects import MessagesMessage
 
 
 @route.method_handler(IrisDutyEventMethod.GROUP_BOTS_INVITED)
@@ -57,8 +57,8 @@ async def group_bots_invited(data: IrisDutyEvent, message: MessagesMessage, api:
                 peer_id=message.peer_id,
                 message=f"✅ Группа-бот [club{data.object.group_id}|{group[0].name}] назначена на роль администратора.",
             )
-        except APIError as e:
-            if e.status_code == 15:
+        except VKAPIError as e:
+            if e.code == 15:
                 await api.messages.send(
                     peer_id=message.peer_id,
                     message=f"❗ Нет привилегий для добавления в группу {group[0].title}.",

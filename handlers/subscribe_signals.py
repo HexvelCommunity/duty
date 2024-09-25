@@ -1,12 +1,12 @@
 from loguru import logger
+from vkbottle import API
+from vkbottle_types.codegen.objects import MessagesMessage
 
 from app.config import settings
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
 from app.schemas.iris.methods import IrisDutyEventMethod
 from app.services.iris import IrisService
-from lib.hexable.api import API
-from lib.hexable.types.hexable_types.codegen.objects import MessagesMessage
 
 
 @route.method_handler(method=IrisDutyEventMethod.SUBSCRIBE_SIGNALS)

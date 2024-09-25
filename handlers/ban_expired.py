@@ -1,9 +1,10 @@
+from vkbottle import VKAPIError
+from vkbottle.api import API
+from vkbottle_types.codegen.objects import MessagesMessage
+
 from app.core import route
 from app.schemas.iris.event import IrisDutyEvent
 from app.schemas.iris.methods import IrisDutyEventMethod
-from lib.hexable.api import API
-from lib.hexable.exceptions import APIError
-from lib.hexable.types.hexable_types.codegen.objects import MessagesMessage
 
 
 @route.method_handler(method=IrisDutyEventMethod.BAN_EXPIRED)
@@ -25,8 +26,8 @@ async def ban_expired(
             chat_id=message.peer_id - 2000000000,
             user_id=user[0].id,
         )
-    except APIError as e:
-        if e.status_code == 15:
+    except VKAPIError as e:
+        if e.code == 15:
             await api.messages.edit(
                 peer_id=message.peer_id,
                 message_id=message_id,

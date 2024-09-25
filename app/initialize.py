@@ -1,20 +1,23 @@
+import contextlib
 import os
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from loguru import logger
+from vkbottle import API
 
 from app.config import settings
 from app.depends import iris_service
 from app.repositories.iris import User
-from lib.hexable.api import API, OwnerType
-from dotenv import load_dotenv
 
 api: API | None = None
-logger.disable("lib.hexable")
+logger.disable("vkbottle")
 
 
 load_dotenv()
 
+
+@contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     global api
     logger.debug("App started")
@@ -37,10 +40,9 @@ async def lifespan(app: FastAPI):
         user = iris_service.create_user(user=user_dto)
 
     api = API(token=token)
-    api._owner_type = OwnerType.USER
 
     yield
-    await api.close_session()
+    await api.http_client.close()
     logger.warning("App stopped")
 
 
